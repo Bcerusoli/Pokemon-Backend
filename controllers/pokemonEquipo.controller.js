@@ -29,7 +29,7 @@ exports.addPokemonToEquipo = async (req, res) => {
         
         const pokemonEquipo = await db.pokemonEquipo.create({ equipoId, pokemonId });
 
-        o
+        
         const pokemonConDetalles = await db.pokemon.findByPk(pokemonId, {
             attributes: ["id", "nombre", "imagen", "baseHP", "baseAtaque", "baseDefensa", "baseAtaqueEspecial", "baseDefensaEspecial", "baseVelocidad"],
         });
