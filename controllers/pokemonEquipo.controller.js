@@ -97,11 +97,11 @@ exports.removePokemonFromEquipo = async (req, res) => {
     }
 };
 exports.getPokemonDetails = async (req, res) => {
-    const { pokemonId } = req.params;
+    const { id } = req.params; 
 
     try {
         const pokemonEquipo = await db.pokemonEquipo.findOne({
-            where: { pokemonId },
+            where: { id },
             include: [
                 {
                     model: db.pokemon,
@@ -126,7 +126,6 @@ exports.getPokemonDetails = async (req, res) => {
             id: pokemonEquipo.id,
             equipoId: pokemonEquipo.equipoId,
             apodo: pokemonEquipo.apodo || "",
-            
             ivHP: pokemonEquipo.ivHP,
             ivAtaque: pokemonEquipo.ivAtaque,
             ivDefensa: pokemonEquipo.ivDefensa,

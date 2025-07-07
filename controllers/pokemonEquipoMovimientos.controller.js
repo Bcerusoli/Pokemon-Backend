@@ -1,9 +1,12 @@
 const db = require("../models");
 
 exports.listMovimientosForPokemon = async (req, res) => {
-    const { pokemonId } = req.params;
+    const { pokemonEquipoId } = req.params;
     try {
-        const pokemon = await db.pokemon.findByPk(pokemonId, {
+        const pokemonEquipo = await db.pokemonEquipo.findByPk(pokemonEquipoId);
+        if (!pokemonEquipo) return res.status(404).send({ message: "Pokémon en el equipo no encontrado" });
+
+        const pokemon = await db.pokemon.findByPk(pokemonEquipo.pokemonId, {
             include: [
                 {
                     model: db.movimiento,
@@ -19,11 +22,21 @@ exports.listMovimientosForPokemon = async (req, res) => {
                 },
             ],
         });
-        if (!pokemon) return res.status(404).send({ message: "Pokémon no encontrado" });
-        res.send(pokemon.movimientos);
+        if (!pokemon) return res.status(404).send({ message: "Pokémon base no encontrado" });
+
+        const asignados = await db.pokemonEquipoMovimientos.findAll({
+            where: { pokemonEquipoId },
+            attributes: ["movimientoId"],
+        });
+        const movimientosAsignados = asignados.map(m => m.movimientoId);
+
+        res.send({
+            movimientosDisponibles: pokemon.movimientos,
+            movimientosAsignados
+        });
     } catch (error) {
-        console.error("Error listando movimientos del Pokémon:", error);
-        res.status(500).send({ message: "Error al listar movimientos del Pokémon" });
+        console.error("Error listando movimientos del Pokémon en equipo:", error);
+        res.status(500).send({ message: "Error al listar movimientos del Pokémon en equipo" });
     }
 };
 

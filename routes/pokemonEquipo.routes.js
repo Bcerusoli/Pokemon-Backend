@@ -9,7 +9,7 @@ module.exports = app => {
     router.get("/:equipoId", pokemonEquipoController.listPokemonInEquipo);
 
     // Obtener los detalles de un Pokémon en el equipo
-    router.get("/:pokemonId/details", pokemonEquipoController.getPokemonDetails);
+    router.get("/:id/details", pokemonEquipoController.getPokemonDetails);
 
     // Actualizar el apodo del Pokémon
     router.put("/:id/nickname", pokemonEquipoController.updateNickname);
